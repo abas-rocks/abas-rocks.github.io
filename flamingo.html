@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)https://polymer.github.io/ar-logo/ -->
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>AR Logo</title>
+    <meta name="theme-color" content="#000000">
+
+    <link rel="manifest" href="https://polymer.github.io/ar-logo/manifest.json">
+
+    <script async="" src="analytics.js"></script>
+    <script src="three.min.js"></script>
+    <script src="OBJLoader.js"></script>
+    <script src="ar.js"></script>
+    <script src="THREE.TextSprite.js"></script>
+    <script src="https://cdn.rawgit.com/SeregPie/THREE.TextTexture/95b02af6/THREE.TextTexture.min.js"></script>
+
+
+    <style>
+        body {
+            margin: 0;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #fff;
+        }
+
+        #markerInfo {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            opacity: 1;
+            transition: opacity 0.2s;
+            will-change: opacity;
+        }
+
+        #markerInfo.hidden {
+            opacity: 0;
+        }
+
+        .marker-img-container {
+            perspective: 600px;
+        }
+
+        .marker-img-container img {
+            width: 200px;
+            height: 200px;
+            vertical-align: middle;
+            transform: rotateX(60deg);
+            opacity: 0.5;
+        }
+
+        .help-link {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 24px;
+            line-height: 24px;
+            background: #666;
+            border-radius: 50%;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            opacity: 0.8;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body style="">
+<main id="markerInfo">
+    <div class="marker-img-container">
+        <img src="pattern-marker.png" alt="marker">
+    </div>
+    <p>Marker not detected</p>
+</main>
+
+<a class="help-link" href="https://polymer.github.io/ar-logo/marker/">?</a>
+
+<script>
+    try {
+        /**
+         * Based on example code by Jerome Etienne (https://github.com/jeromeetienne/AR.js).
+         */
+
+            //////////////////////////////////////////////////////////////////////////////////
+            //    Init
+            //////////////////////////////////////////////////////////////////////////////////
+
+            // init renderer
+        var renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+        renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+        renderer.setSize(640, 640);
+        renderer.domElement.style.position = 'absolute'
+        renderer.domElement.style.top = '0px'
+        renderer.domElement.style.left = '0px'
+        document.body.appendChild(renderer.domElement);
+
+        // array of functions for the rendering loop
+        var onRenderFcts = [];
+
+        // init scene and camera
+        var scene = new THREE.Scene();
+
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //    Initialize a basic camera
+        //////////////////////////////////////////////////////////////////////////////////
+
+        // Create a camera
+        var camera = new THREE.Camera();
+        scene.add(camera);
+
+        ////////////////////////////////////////////////////////////////////////////////
+        //          handle arToolkitSource
+        ////////////////////////////////////////////////////////////////////////////////
+
+        var arToolkitSource = new THREEx.ArToolkitSource({
+            // to read from the webcam
+            sourceType: 'webcam',
+            // resolution of at which we initialize in the source image
+            sourceWidth: 640,
+            sourceHeight: 640,
+            // resolution displayed for the source
+            displayWidth: 640,
+            displayHeight: 640
+        })
+
+        arToolkitSource.init(function onReady() {
+            onResize()
+        }, function onError() {
+            window.alert('MediaDevices.getUserMedia() is not supported on your browser. Try this with Chrome for Android or Safari on iOS 11.');
+        })
+
+        // handle resize
+        window.addEventListener('resize', function () {
+            onResize()
+        })
+        function onResize() {
+            arToolkitSource.onResizeElement()
+            arToolkitSource.copyElementSizeTo(renderer.domElement)
+            if (arToolkitContext.arController !== null) {
+                arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas)
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        //          initialize arToolkitContext
+        ////////////////////////////////////////////////////////////////////////////////
+
+
+        // create atToolkitContext
+        var arToolkitContext = new THREEx.ArToolkitContext({
+            cameraParametersUrl: 'camera_para.dat',
+            detectionMode: 'mono',
+        })
+        // initialize it
+        arToolkitContext.init(function onCompleted() {
+            // copy projection matrix to camera
+            camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+        })
+
+        // update artoolkit on every frame
+        onRenderFcts.push(function () {
+            if (arToolkitSource.ready === false) return
+
+            arToolkitContext.update(arToolkitSource.domElement)
+
+            // update scene.visible if the marker is seen
+            scene.visible = camera.visible
+
+            markerInfo.classList.toggle('hidden', camera.visible)
+        })
+
+        ////////////////////////////////////////////////////////////////////////////////
+        //          Create a ArMarkerControls
+        ////////////////////////////////////////////////////////////////////////////////
+
+        // init controls for camera
+        var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
+            type: 'pattern',
+            patternUrl: 'pattern-marker.patt',
+            // as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
+            changeMatrixMode: 'cameraTransformMatrix'
+        })
+        // as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
+        scene.visible = false
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //    add an object in the scene
+        //////////////////////////////////////////////////////////////////////////////////
+
+//    var material  = new THREE.MeshNormalMaterial({
+//      transparent : false,
+//      opacity: 0.5
+//    });
+        var material = new THREE.MeshLambertMaterial({
+            color: 0xff0000
+        });
+
+        var mesh;
+        var mixers = [];
+
+
+        // LIGHT
+        var dirLight, dirLightHeper, hemiLight, hemiLightHelper;
+        // LIGHTS
+        hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
+        hemiLight.color.setHSL( 0.6, 1, 0.6 );
+        hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+        hemiLight.position.set( 0, 50, 0 );
+        scene.add( hemiLight );
+//        hemiLightHelper = new THREE.HemisphereLightHelper( hemiLight, 10 );
+//        scene.add( hemiLightHelper );
+        dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+        dirLight.color.setHSL( 0.1, 1, 0.95 );
+        dirLight.position.set( -1, 1.75, 1 );
+        dirLight.position.multiplyScalar( 30 );
+        scene.add( dirLight );
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        var d = 50;
+        dirLight.shadow.camera.left = -d;
+        dirLight.shadow.camera.right = d;
+        dirLight.shadow.camera.top = d;
+        dirLight.shadow.camera.bottom = -d;
+        dirLight.shadow.camera.far = 3500;
+        dirLight.shadow.bias = -0.0001;
+//        dirLightHeper = new THREE.DirectionalLightHelper( dirLight, 10 )
+//        scene.add( dirLightHeper );
+
+
+
+        var loader = new THREE.JSONLoader();
+        loader.load('flamingo.json', function(geometry, materials) {
+            var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, shininess: 20, morphTargets: true, vertexColors: THREE.FaceColors, flatShading: true } );
+            var mesh = new THREE.Mesh( geometry, material );
+            var s = 0.02;
+            mesh.scale.set( s, s, s );
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            scene.add( mesh );
+            var mixer = new THREE.AnimationMixer( mesh );
+            mixer.clipAction( geometry.animations[ 0 ] ).setDuration( 1 ).play();
+            mixers.push( mixer );
+
+        });
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //    render the whole thing on the page
+        //////////////////////////////////////////////////////////////////////////////////
+
+        // render the scene
+        onRenderFcts.push(function () {
+            renderer.render(scene, camera);
+        });
+
+        var clock = new THREE.Clock();
+
+        // run the rendering loop
+        requestAnimationFrame(function animate() {
+            // keep looping
+            requestAnimationFrame(animate);
+            // call each update function
+            onRenderFcts.forEach(function (onRenderFct) {
+                onRenderFct()
+
+                var delta = clock.getDelta();
+                for ( var i = 0; i < mixers.length; i ++ ) {
+                    mixers[ i ].update( delta );
+                }
+
+            })
+        });
+    } catch (e) {
+    }
+
+    // Service worker registration
+    if ('serviceWorker' in window.navigator) {
+        window.addEventListener('load', function () {
+            window.navigator.serviceWorker.register('sw.js')
+        });
+    }
+</script>
+<canvas width="640" height="640"
+        style="width: 1867px; height: 1867px; position: absolute; top: 0px; left: 0px; margin-left: 0px; margin-top: -475px;"></canvas>
+</body>
+</html>
