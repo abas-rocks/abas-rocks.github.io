@@ -1,0 +1,213 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/app-layout/app-header">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar">
+<link rel="import" href="jira-markdown.html">
+
+<dom-module id="abas-milestones-viewer-app">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+
+            .container {
+                display: flex;
+                flex-direction: row;
+                margin-top: 60px;
+            }
+
+            #grid {
+                min-height: 800px;
+                width: 100%;
+                border: 0px;
+            }
+
+            .header {
+                color: grey;
+
+            }
+
+            .details {
+                width: 100%;
+                margin: 20px;
+                overflow: auto;
+            }
+
+            vaadin-grid-table-header {
+                color: grey;
+            }
+
+            paper-card {
+                width: 100%;
+                margin: 5px;
+            }
+
+            vaadin-grid {
+                font: 300 14px/1.55 "Open Sans", sans-serif;
+                font-color: #2a3539;
+                -webkit-font-smoothing: antialiased;
+
+                --vaadin-grid-cell: {
+                    padding: 0.5em 40px 0.5em 0.5em;
+                    cursor: hand;
+                    border-width: 2px;
+                };
+
+                --vaadin-grid-body-row-active-cell: {
+                    background: #dbdbdb;
+                    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
+
+                };
+
+                --vaadin-grid-column-resize-handle: {
+                    border-width: 0px;
+                }
+
+            }
+
+            app-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 50px;
+                width: 100%;
+                color: #fff;
+                background-color: #3f4a4e;
+            }
+
+            .logo {
+                margin: 5px;
+                margin-left: 20px;
+                height: 35px;
+                background-color: #3f4a4e;
+            }
+
+        </style>
+
+        <iron-ajax
+                auto
+                id="ajax"
+                url="/data.json"
+                handle-as="json"
+                last-response="{{data}}"
+                debounce-duration="300"></iron-ajax>
+
+
+        <div class="container">
+            <app-header>
+                <app-toolbar>
+                    <image class="logo" src="images/abas.png"></image>
+                </app-toolbar>
+            </app-header>
+            <paper-card>
+                <div class="card-content">
+                    <vaadin-grid id="grid" items="[[data]]" on-active-item-changed="_onActiveItemChanged">
+                        <vaadin-grid-column width="200px" flex-grow="1" resizable>
+                            <template class="header">
+                                <vaadin-grid-sorter path="project">Project</vaadin-grid-sorter>
+                            </template>
+                            <template>[[item.project]]</template>
+                        </vaadin-grid-column>
+
+                        <vaadin-grid-column width="400px" flex-grow="1" resizable>
+                            <template class="header">
+                                <vaadin-grid-sorter path="title">Title</vaadin-grid-sorter>
+                            </template>
+                            <template>
+                                [[item.title]]
+                            </template>
+                        </vaadin-grid-column>
+
+
+                        <vaadin-grid-column width="150px" resizable>
+                            <template class="header">
+                                <vaadin-grid-sorter path="title">Next Review</vaadin-grid-sorter>
+                            </template>
+                            <template>
+                                [[item.reviewDate]]
+                            </template>
+                        </vaadin-grid-column>
+
+
+                        <vaadin-grid-column width="150px" resizable>
+                            <template class="header">
+                                <vaadin-grid-sorter path="title">Review Link</vaadin-grid-sorter>
+                            </template>
+                            <template>
+                                <a href="[[item.reviewLink]]">[[item.reviewLink]]</a>
+                            </template>
+                        </vaadin-grid-column>
+
+
+                        <vaadin-grid-column width="150px" resizable>
+                            <template class="header">
+                                <vaadin-grid-sorter path="title">Created</vaadin-grid-sorter>
+                            </template>
+                            <template>
+                                [[item.created]]
+                            </template>
+                        </vaadin-grid-column>
+
+
+                        <vaadin-grid-column width="150px" resizable>
+                            <template class="header">
+                                <vaadin-grid-sorter path="title">Last Updated</vaadin-grid-sorter>
+                            </template>
+                            <template>
+                                [[item.lastUpdated]]
+                            </template>
+                        </vaadin-grid-column>
+                    </vaadin-grid>
+                </div>
+            </paper-card>
+            <template is="dom-if" if="{{selectedItem}}">
+                <paper-card>
+                    <div class="card-content">
+                        <h1>[[selectedItem.title]]</h1>
+                        <h2>[[selectedItem.project]]</h2>
+                        <p><a href="[[selectedItem.reviewLink]]">Join our next review per zoom</a></p>
+                        <p>Created: [[selectedItem.created]]</p>
+                        <p>Last Updated: [[selectedItem.lastUpdated]]</p>
+                        <jira-markdown content="[[selectedItem.description]]"></jira-markdown>
+                    </div>
+                </paper-card>
+            </template>
+
+
+        </div>
+
+    </template>
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class AbasMilestonesViewerApp extends Polymer.Element {
+        static get is() {
+          return 'abas-milestones-viewer-app';
+        }
+
+        static get properties() {
+          return {
+            selectedItem: {
+              type: Object
+            }
+          }
+        }
+
+
+        _onActiveItemChanged(e) {
+          this.selectedItem = e.detail.value;
+        }
+
+
+      }
+
+      window.customElements.define(AbasMilestonesViewerApp.is, AbasMilestonesViewerApp);
+    </script>
+</dom-module>

@@ -1,0 +1,7 @@
+{
+  "name": "abas-milestones-viewer",
+  "short_name": "abas-milestones-viewer",
+  "description": "abas milestones viewer",
+  "start_url": "/",
+  "display": "standalone"
+}

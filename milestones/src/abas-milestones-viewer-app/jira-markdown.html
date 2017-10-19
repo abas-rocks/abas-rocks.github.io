@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="markdown-import.html">
+<dom-module id="jira-markdown">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <div id="con"></div>
+    </template>
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class JiraMarkdown extends Polymer.Element {
+        static get is() {
+          return 'jira-markdown';
+        }
+
+        static get properties() {
+          return {
+            content: {
+              type: String,
+            },
+            contentHTML: {
+              type: String,
+              computed: "toMarkdown(content)"
+            }
+          };
+        }
+
+        static get observers() {
+          return ["toMarkdown(content)"];
+        }
+
+        toMarkdown(content) {
+          var html = window.J2M.jira_to_html(content);
+          this.$.con.innerHTML = html;
+          console.log(html);
+        }
+      }
+      window.customElements.define(JiraMarkdown.is, JiraMarkdown);
+    </script>
+</dom-module>
