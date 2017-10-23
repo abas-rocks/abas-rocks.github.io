@@ -1,19 +1,38 @@
-[{
-  "project" : "Service and Repair Management - Version 2018",
-  "title" : "(Internal) Maintenance for machines and means of production",
-  "description" : "h4. Brief description\n  Support the internal process to *maintain* machines (pumps, molding presses, drilling machine, engines, etc.) and/or means of productions (pressing tool, etc.) on a regular basis (maintainance) or an emergency basis.\nh4. Current system behaviour\n  * scheduling is not consideration maintenance time for machine groups automatically (must be done manually)\n  * scheduling does not consider the required time for means of production\n  * there is not enough guidelines in abas ERP to accomplish\n  ** planning future maintenance time for machines and/or means of production\n  ** requesting the maintenance internally (internal production) or request an external vendor\nh4. Requirement description\n  # Create a possibility for managing maintenance of machine groups and/or means of production\n  ## provide planning layer for future maintenance\n  ## provide a planning structure based on operating hours, amount of kilometers, press counter, etc.)\n  # create an alerting feature which helps a user to identify that a machine group must be maintained (e.g. via a business app)\n  # Allow handling machine groups and means of productions similar as service products\n  ## create a service request\n  ## create a repair order (if the machine group can be maintained internally)\n  ## create a purchase order (if the machine group must be maintained externally)\nh4.Maintenance pattern example\n  There should be an functionaly established which supports regular maintenance activities for service products. For internal planning this feature should support a service scheduler/planer in order to allocate technicians to maintenance reservations. This regular maintenance activities could be\n  * 1 maintenance every X months,\n  * 1 maintenance every x use of a mean of production,\n  * 1 maintenance every x hours of time declared on a machine,\n  * manual planning for these actions.\n  ",
-  "created" : "22/Dec/16 7:31 PM",
-  "lastUpdated" : "10/Jan/17 8:07 PM",
-  "reviewLink" : "https://zoom.us/j/xxxxxx",
-  "reviewDate" : "25/Dec/17 12:00 PM"
+[
+  {
+    "components": [
+      "Mangelmanagement"
+    ],
+    "descr": "*1. Wodurch wurde das Projekt ausgelöst?*\r\nErgonomie, Vereinfachen der Programme\n\r\n*2. Welches Problem / welche Aufgabe soll gelöst werden?*\r\n Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\r\n\r\n*3. Welche Ziele werden im Rahmen des Projekts verfolgt?*\r\n* Lorem ipsum dolor sit ame.\r\n* Lorem ipsum dolor sit amet, consectetuer adipiscin.\r\n* Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod ti.\r\n\r\n*4. Welche Ziele werden im Rahmen des Projekts nicht verfolgt?*\r\n* Komplette Umstellung.\r\n\r\n*5. Welche Risiken birgt das Projekt?*\r\n* Terminrisiko: Teamübergreifendes Querschnittsprojekt im agilen Umfeld ist nicht erprobt.\r\n* Ohne Darstellung aller Pflichtfelder (statische, dynamische und kundenindividuelle Felder) ist das Feature für Kunden schwer durchschaubar und führt zu vermehrten Rückfragen an der Hotline.\r\n* normale Projektrisiken\r\n\r\n*6. Welche Risiken gibt es, wenn das Projekt nicht angegangen wird?* \r\n* Es wird von Kunden / Interessenten als Qualitätsmangel bewertet.",
+    "headline": "Projektmanagement für Maschinen- und Anlagenbauer",
+    "status": "Offen",
+    "assignee": "Max Mustermann",
+    "nextReview": "2017/10/30 14:53:39",
+    "reviewLink": "https://review.link/123",
+    "lastUpdate": "2017/10/12 14:05:53"
   },
   {
-    "project" : "abas Core - Version 2018",
-    "title" : "Get rid of the fop.txt",
-    "description" : "h4. Brief description\n  Support the internal process to *maintain* machines (pumps, molding presses, drilling machine, engines, etc.) and/or means of productions (pressing tool, etc.) on a regular basis (maintainance) or an emergency basis.\nh4. Current system behaviour\n  * scheduling is not consideration maintenance time for machine groups automatically (must be done manually)\n  * scheduling does not consider the required time for means of production\n  * there is not enough guidelines in abas ERP to accomplish\n  ** planning future maintenance time for machines and/or means of production\n  ** requesting the maintenance internally (internal production) or request an external vendor\nh4. Requirement description\n  # Create a possibility for managing maintenance of machine groups and/or means of production\n  ",
-    "created" : "12/Nov/15 7:31 PM",
-    "lastUpdated" : "30/Jan/17 8:07 PM",
-    "reviewLink" : "https://zoom.us/j/xxxxxx",
-    "reviewDate" : "25/Oct/17 12:00 PM"
+    "components": [
+      "Mobile Anwendungen"
+    ],
+    "descr": "*1. Wodurch wurde das Projekt ausgelöst?*\r\nEine integrierte ERP Software ist der Schlüssel, um das Potenzial Ihres Teams voll auszuschöpfen. Ob Management oder Controlling, Einkauf oder Vertrieb, Service oder Rechnungswesen, Produktion oder Lager: Als Komplettlösung stellt abas ERP jedem Ihrer Mitarbeiter genau die Funktionen und Informationen zur Verfügung, die er braucht\n\r\n*2. Welches Problem / welche Aufgabe soll gelöst werden?*\r\n Egal ob 10 oder 1.000 Mitarbeiter, egal welche Branche und welcher Geschäftsbereich: Unser Ziel ist es, Ihre Prozesse so zu optimieren, dass Sie Zeit und Kosten sparen, mehr Durchblick erhalten, sicherer vorausplanen und so auch in Zukunft wettbewerbsfähig bleiben. Ganz nebenbei macht das Arbeiten mit der intuitiven Benutzeroberfläche von abas ERP richtig Spaß..\r\n\r\n*3. Welche Ziele werden im Rahmen des Projekts verfolgt?*\r\n* Lorem ipsum dolor sit ame.\r\n* Lorem ipsum dolor sit amet, consectetuer adipiscin.\r\n* Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod ti.\r\n\r\n*4. Welche Ziele werden im Rahmen des Projekts nicht verfolgt?*\r\n* Komplette Umstellung.\r\n\r\n*5. Welche Risiken birgt das Projekt?*\r\n* Terminrisiko: Teamübergreifendes Querschnittsprojekt im agilen Umfeld ist nicht erprobt.\r\n* Ohne Darstellung aller Pflichtfelder (statische, dynamische und kundenindividuelle Felder) ist das Feature für Kunden schwer durchschaubar und führt zu vermehrten Rückfragen an der Hotline.\r\n* normale Projektrisiken\r\n\r\n*6. Welche Risiken gibt es, wenn das Projekt nicht angegangen wird?* \r\n* Es wird von Kunden / Interessenten als Qualitätsmangel bewertet.",
+    "headline": "Mobile Anwendungen in der Fertigung",
+    "status": "Offen",
+    "assignee": "Andreas Schmitt",
+    "nextReview": "2017/10/29 16:00",
+    "reviewLink": "https://review.link/123",
+    "lastUpdate": "2017/10/12 14:05:53"
+  },
+  {
+    "components": [
+      "Mobile Anwendungen"
+    ],
+    "descr": "Unternehmen sind heute mehr denn je mit Szenarien konfrontiert, die rasche Entscheidungen auf Basis solider Informationen erfordern. Waren klassische BI-Lösungen vor geraumer Zeit noch eine echte Errungenschaft, stoßen sie wegen des steigenden Volumens und der Heterogenität von Daten zunehmend an ihre Grenzen.",
+    "headline": "Business Intelligence",
+    "status": "Offen",
+    "assignee": "Viktoria Fuchs",
+    "nextReview": "2017/10/28 12:00",
+    "reviewLink": "https://review.link/123",
+    "lastUpdate": "2017/10/12 14:05:53"
   }
 ]

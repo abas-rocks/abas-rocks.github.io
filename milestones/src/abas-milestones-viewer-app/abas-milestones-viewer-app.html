@@ -105,13 +105,18 @@
                 </app-toolbar>
             </app-header>
             <paper-card>
+                <!--Komponente(n), Zusammenfassung, Status, Product Owner, Next Review, Review Link, Last Updated-->
                 <div class="card-content">
                     <vaadin-grid id="grid" items="[[data]]" on-active-item-changed="_onActiveItemChanged">
                         <vaadin-grid-column width="200px" flex-grow="1" resizable>
                             <template class="header">
-                                <vaadin-grid-sorter path="project">Project</vaadin-grid-sorter>
+                                <vaadin-grid-sorter path="project">Components</vaadin-grid-sorter>
                             </template>
-                            <template>[[item.project]]</template>
+                            <template>
+                                <template is="dom-repeat" items="{{item.components}}" as="component">
+                                    [{{component}}]
+                                </template>
+                            </template>
                         </vaadin-grid-column>
 
                         <vaadin-grid-column width="400px" flex-grow="1" resizable>
@@ -119,20 +124,28 @@
                                 <vaadin-grid-sorter path="title">Title</vaadin-grid-sorter>
                             </template>
                             <template>
-                                [[item.title]]
+                                [[item.headline]]
                             </template>
                         </vaadin-grid-column>
 
+
+                        <vaadin-grid-column width="100px" flex-grow="1" resizable>
+                            <template class="header">
+                                <vaadin-grid-sorter path="title">Status</vaadin-grid-sorter>
+                            </template>
+                            <template>
+                                [[item.status]]
+                            </template>
+                        </vaadin-grid-column>
 
                         <vaadin-grid-column width="150px" resizable>
                             <template class="header">
-                                <vaadin-grid-sorter path="title">Next Review</vaadin-grid-sorter>
+                                <vaadin-grid-sorter path="title">Product Owner</vaadin-grid-sorter>
                             </template>
                             <template>
-                                [[item.reviewDate]]
+                                [[item.assignee]]
                             </template>
                         </vaadin-grid-column>
-
 
                         <vaadin-grid-column width="150px" resizable>
                             <template class="header">
@@ -142,24 +155,12 @@
                                 <a href="[[item.reviewLink]]">[[item.reviewLink]]</a>
                             </template>
                         </vaadin-grid-column>
-
-
                         <vaadin-grid-column width="150px" resizable>
                             <template class="header">
-                                <vaadin-grid-sorter path="title">Created</vaadin-grid-sorter>
+                                <vaadin-grid-sorter path="title">Next Review</vaadin-grid-sorter>
                             </template>
                             <template>
-                                [[item.created]]
-                            </template>
-                        </vaadin-grid-column>
-
-
-                        <vaadin-grid-column width="150px" resizable>
-                            <template class="header">
-                                <vaadin-grid-sorter path="title">Last Updated</vaadin-grid-sorter>
-                            </template>
-                            <template>
-                                [[item.lastUpdated]]
+                                [[item.nextReview]]
                             </template>
                         </vaadin-grid-column>
                     </vaadin-grid>
@@ -168,12 +169,13 @@
             <template is="dom-if" if="{{selectedItem}}">
                 <paper-card>
                     <div class="card-content">
-                        <h1>[[selectedItem.title]]</h1>
+                        <h1>[[selectedItem.headline]]</h1>
                         <h2>[[selectedItem.project]]</h2>
                         <p><a href="[[selectedItem.reviewLink]]">Join our next review per zoom</a></p>
-                        <p>Created: [[selectedItem.created]]</p>
-                        <p>Last Updated: [[selectedItem.lastUpdated]]</p>
-                        <jira-markdown content="[[selectedItem.description]]"></jira-markdown>
+                        <p><b>Product Owner:</b> [[selectedItem.assignee]]</p>
+                        <p><b>Last Updated:</b> [[selectedItem.lastUpdate]]</p>
+                        <p><b>Status:</b> [[selectedItem.status]]</p>
+                        <jira-markdown content="[[selectedItem.descr]]"></jira-markdown>
                     </div>
                 </paper-card>
             </template>
